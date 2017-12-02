@@ -1,10 +1,43 @@
 program main
 implicit none 
 
-    call dayOnePartOne
-    call dayOnePartTwo
+    ! call dayOnePartOne
+    ! call dayOnePartTwo
+
+    call dayTwoPartOne
 
 end program main
+
+
+! ----------------------------------------------------------
+subroutine dayTwoPartOne
+    integer checksum, numberOfColumns, numberOfRows, maxElement, minElement, rowDifference
+    integer, allocatable :: row(:)
+    
+    numberOfColumns = 16
+    numberOfRows = 16
+    checksum = 0
+
+    open(7, file='dayTwo.txt')
+    allocate(row(numberOfColumns))
+    do j = 1, numberOfRows
+        read(7,*) row
+        maxElement = row(1)
+        minElement = row(1)
+        do i = 2, numberOfColumns
+            if (row(i) > maxElement) maxElement = row(i)
+            if (row(i) < minElement) minElement = row(i)
+        enddo
+        rowDifference = maxElement - minElement
+        checksum = checksum + rowDifference   
+    enddo
+    deallocate(row)
+    close(7)
+    
+
+    call printResult('Two', 3, '2', 1, checksum)
+    return
+end subroutine dayTwoPartOne
 
 
 ! ----------------------------------------------------------
