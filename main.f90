@@ -2,16 +2,23 @@ program main
 implicit none 
 
     integer i, firstNumber, currentNumber, nextNumber, total
-    character(len=4) :: numberList
+    character(len=2196) :: numberList
 
-    numberList = '1111'
+    open (unit = 7, file = "day1.txt")
+    read (7,*) numberList
+    close(7)
+
     total = 0
 
-    do i = 1, 3
-        if (i == 1) firstNumber = currentNumber
+    do i = 1, 2195
         read(numberList(i:i), '(i1)') currentNumber
         read(numberList(i+1:i+1), '(i1)') nextNumber
-        if ( currentNumber == nextNumber ) total = total + currentNumber
+        if (i == 1) then
+            firstNumber = currentNumber
+        endif
+        if (currentNumber == nextNumber) then
+            total = total + currentNumber
+        endif
     enddo
     if (nextNumber == firstNumber) total = total + firstNumber
 
