@@ -1,10 +1,16 @@
 program main
 implicit none 
 
+    call dayOnePartOne
+
+end program main
+
+
+subroutine dayOnePartOne
     integer i, firstNumber, currentNumber, nextNumber, total
     character(len=2196) :: numberList
 
-    open (unit = 7, file = "day1.txt")
+    open (unit = 7, file = "dayOne.txt")
     read (7,*) numberList
     close(7)
 
@@ -22,6 +28,6 @@ implicit none
     enddo
     if (nextNumber == firstNumber) total = total + firstNumber
 
-    print *, total
-
-end program main
+    print *, total 
+    return
+end subroutine
