@@ -1,12 +1,51 @@
 program main
 implicit none 
 
-    ! call dayOnePartOne
-    ! call dayOnePartTwo
+    call dayOnePartOne
+    call dayOnePartTwo
 
     call dayTwoPartOne
+    call dayTwoPartTwo
 
 end program main
+
+
+! ----------------------------------------------------------
+subroutine dayTwoPartTwo
+    integer checksum, numberOfColumns, numberOfRows, currentNumber, comparisonNumber, rowDifference
+    integer, allocatable :: row(:)
+    
+    numberOfColumns = 16
+    numberOfRows = 16
+    checksum = 0
+
+    open(7, file='dayTwo.txt')
+    allocate(row(numberOfColumns))
+    do j = 1, numberOfRows
+        read(7,*) row
+        rowDifference = -1
+        do i = 1, numberOfColumns
+            currentNumber = row(i)
+            do k = i+1, numberOfColumns
+                comparisonNumber = row(k)
+                if (mod(currentNumber, comparisonNumber) == 0) then
+                    rowDifference = currentNumber / comparisonNumber
+                    exit
+                else if (mod(comparisonNumber, currentNumber) == 0) then
+                    rowDifference = comparisonNumber / currentNumber
+                    exit
+                endif
+            enddo
+            if (rowDifference /= -1) exit
+        enddo
+        checksum = checksum + rowDifference   
+    enddo
+    deallocate(row)
+    close(7)
+    
+    call printResult('Two', 3, '2', 1, checksum)
+    return
+end subroutine dayTwoPartTwo
 
 
 ! ----------------------------------------------------------
@@ -34,8 +73,7 @@ subroutine dayTwoPartOne
     deallocate(row)
     close(7)
     
-
-    call printResult('Two', 3, '2', 1, checksum)
+    call printResult('Two', 3, '1', 1, checksum)
     return
 end subroutine dayTwoPartOne
 
