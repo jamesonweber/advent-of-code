@@ -1,13 +1,116 @@
 program main
 implicit none 
 
-    call dayOnePartOne
-    call dayOnePartTwo
+    ! call dayOnePartOne
+    ! call dayOnePartTwo
 
-    call dayTwoPartOne
-    call dayTwoPartTwo
+    ! call dayTwoPartOne
+    ! call dayTwoPartTwo
+
+    call dayThreePartOne
 
 end program main
+
+
+! ----------------------------------------------------------
+subroutine dayThreePartOne
+    integer distance, matrixLength, matrixSize, x, y, originalX, originalY, spiralNumber, spiralNumberPath
+    character currentMoveDirection
+    integer, allocatable :: matrix(:,:)
+
+    ! 277678
+    spiralNumber = 277678
+    spiralNumberPath = 1
+    distance = 0
+    matrixLength = ceiling(sqrt(spiralNumber * 1.0))
+    matrixSize = matrixLength * matrixLength
+    currentMoveDirection = 'D'
+
+    if (mod(matrixLength, 2) == 0) then
+        x = (matrixLength / 2) + 1
+        y = matrixLength / 2
+    else
+        x = ceiling(matrixLength / 2.0)
+        y = ceiling(matrixLength / 2.0)
+    endif
+
+    originalX = x
+    originalY = y
+
+    allocate(matrix(matrixLength, matrixLength))
+
+        do l = 1, matrixLength
+            do m = 1, matrixLength
+                matrix(l, m) = 0
+            enddo
+        enddo
+
+        matrix(x,y) = spiralNumberPath
+        currentMoveDirection = 'R'
+        spiralNumberPath = spiralNumberPath + 1
+        do j = 1, spiralNumber-1
+            if (currentMoveDirection == 'R') then
+                if (matrix(x,y+1) == 0) then
+                    y = y + 1
+                    matrix(x,y) = spiralNumberPath
+                    spiralNumberPath = spiralNumberPath + 1
+                    currentMoveDirection = 'U'
+                else 
+                    x = x + 1
+                    matrix(x,y) = spiralNumberPath
+                    spiralNumberPath = spiralNumberPath + 1
+                endif
+
+            else if (currentMoveDirection == 'U') then
+                if (matrix(x-1,y) == 0) then
+                    x = x - 1
+                    matrix(x,y) = spiralNumberPath
+                    spiralNumberPath = spiralNumberPath + 1
+                    currentMoveDirection = 'L'
+                else 
+                    y = y + 1
+                    matrix(x,y) = spiralNumberPath
+                    spiralNumberPath = spiralNumberPath + 1
+                endif
+
+            else if (currentMoveDirection == 'L') then
+                if (matrix(x,y-1) == 0) then
+                    y = y - 1
+                    matrix(x,y) = spiralNumberPath
+                    spiralNumberPath = spiralNumberPath + 1
+                    currentMoveDirection = 'D'
+                else 
+                    x = x - 1
+                    matrix(x,y) = spiralNumberPath
+                    spiralNumberPath = spiralNumberPath + 1
+                endif
+
+            else if (currentMoveDirection == 'D') then
+                if (matrix(x+1,y) == 0) then
+                    x = x + 1
+                    matrix(x,y) = spiralNumberPath
+                    spiralNumberPath = spiralNumberPath + 1
+                    currentMoveDirection = 'R'
+                else 
+                    y = y - 1
+                    matrix(x,y) = spiralNumberPath
+                    spiralNumberPath = spiralNumberPath + 1
+                endif
+
+            endif
+        enddo
+
+        distance = (abs(x - originalX) + abs(y - originalY))
+        call printResult('Three', 5, '1', 1, distance)
+        
+        ! do i = 1, matrixLength
+        !     print *, matrix(i, :)      
+        ! enddo 
+    deallocate(matrix)
+
+end subroutine dayThreePartOne
+
+
 
 
 ! ----------------------------------------------------------
