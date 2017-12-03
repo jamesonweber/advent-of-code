@@ -1,15 +1,197 @@
 program main
 implicit none 
 
-    ! call dayOnePartOne
-    ! call dayOnePartTwo
+    call dayOnePartOne
+    call dayOnePartTwo
 
-    ! call dayTwoPartOne
-    ! call dayTwoPartTwo
+    call dayTwoPartOne
+    call dayTwoPartTwo
 
     call dayThreePartOne
+    call dayThreePartTwo
 
 end program main
+
+
+! ----------------------------------------------------------
+subroutine dayThreePartTwo
+    integer distance, matrixLength, matrixSize, x, y, originalX, originalY, spiralNumber, spiralNumberPath
+    character currentMoveDirection
+    integer, allocatable :: matrix(:,:)
+
+    ! 277678
+    spiralNumber = 277678
+    spiralNumberPath = 1
+    distance = 0
+    matrixLength = ceiling(sqrt(spiralNumber * 1.0))
+    matrixSize = matrixLength * matrixLength
+    currentMoveDirection = 'D'
+
+    if (mod(matrixLength, 2) == 0) then
+        x = (matrixLength / 2) + 1
+        y = matrixLength / 2
+    else
+        x = ceiling(matrixLength / 2.0)
+        y = ceiling(matrixLength / 2.0)
+    endif
+
+    originalX = x
+    originalY = y
+
+    ! Well, this is going to use a stupid amount more memory than in needs.
+    ! But hey, requirements dicate finding the fastest solution is more important
+    ! than resource usage. Something something space–time trade off - given more  
+    ! space, computation problems can be solved faster, so this is fine /s.
+    allocate(matrix(matrixLength, matrixLength))
+
+        do l = 1, matrixLength
+            do m = 1, matrixLength
+                matrix(l, m) = 0
+            enddo
+        enddo
+
+        matrix(x,y) = spiralNumberPath
+        currentMoveDirection = 'R'
+        do while (spiralNumberPath < spiralNumber)
+            if (currentMoveDirection == 'R') then
+                if (matrix(x,y+1) == 0) then
+                    y = y + 1
+                    call sumOfAdjacentSquares( &
+                        matrix(x,y+1), &
+                        matrix(x,y-1), &
+                        matrix(x+1,y), &
+                        matrix(x+1,y-1), & 
+                        matrix(x+1,y+1), &
+                        matrix(x-1,y), &
+                        matrix(x-1,y-1), & 
+                        matrix(x-1,y+1), &
+                        spiralNumberPath)
+                    matrix(x,y) = spiralNumberPath
+                    currentMoveDirection = 'U'
+                else 
+                    x = x + 1
+                    call sumOfAdjacentSquares( &
+                        matrix(x,y+1), &
+                        matrix(x,y-1), &
+                        matrix(x+1,y), &
+                        matrix(x+1,y-1), & 
+                        matrix(x+1,y+1), &
+                        matrix(x-1,y), &
+                        matrix(x-1,y-1), & 
+                        matrix(x-1,y+1), &
+                        spiralNumberPath)
+                    matrix(x,y) = spiralNumberPath
+                endif
+
+            else if (currentMoveDirection == 'U') then
+                if (matrix(x-1,y) == 0) then
+                    x = x - 1
+                    call sumOfAdjacentSquares( &
+                        matrix(x,y+1), &
+                        matrix(x,y-1), &
+                        matrix(x+1,y), &
+                        matrix(x+1,y-1), & 
+                        matrix(x+1,y+1), &
+                        matrix(x-1,y), &
+                        matrix(x-1,y-1), & 
+                        matrix(x-1,y+1), &
+                        spiralNumberPath)
+                    matrix(x,y) = spiralNumberPath
+                    currentMoveDirection = 'L'
+                else 
+                    y = y + 1
+                    call sumOfAdjacentSquares( &
+                        matrix(x,y+1), &
+                        matrix(x,y-1), &
+                        matrix(x+1,y), &
+                        matrix(x+1,y-1), & 
+                        matrix(x+1,y+1), &
+                        matrix(x-1,y), &
+                        matrix(x-1,y-1), & 
+                        matrix(x-1,y+1), &
+                        spiralNumberPath)
+                    matrix(x,y) = spiralNumberPath
+                endif
+
+            else if (currentMoveDirection == 'L') then
+                if (matrix(x,y-1) == 0) then
+                    y = y - 1
+                    call sumOfAdjacentSquares( &
+                        matrix(x,y+1), &
+                        matrix(x,y-1), &
+                        matrix(x+1,y), &
+                        matrix(x+1,y-1), & 
+                        matrix(x+1,y+1), &
+                        matrix(x-1,y), &
+                        matrix(x-1,y-1), & 
+                        matrix(x-1,y+1), &
+                        spiralNumberPath)
+                    currentMoveDirection = 'D'
+                    matrix(x,y) = spiralNumberPath
+                else 
+                    x = x - 1
+                    call sumOfAdjacentSquares( &
+                        matrix(x,y+1), &
+                        matrix(x,y-1), &
+                        matrix(x+1,y), &
+                        matrix(x+1,y-1), & 
+                        matrix(x+1,y+1), &
+                        matrix(x-1,y), &
+                        matrix(x-1,y-1), & 
+                        matrix(x-1,y+1), &
+                        spiralNumberPath)
+                    matrix(x,y) = spiralNumberPath
+                endif
+
+            else if (currentMoveDirection == 'D') then
+                if (matrix(x+1,y) == 0) then
+                    x = x + 1
+                    call sumOfAdjacentSquares( &
+                        matrix(x,y+1), &
+                        matrix(x,y-1), &
+                        matrix(x+1,y), &
+                        matrix(x+1,y-1), & 
+                        matrix(x+1,y+1), &
+                        matrix(x-1,y), &
+                        matrix(x-1,y-1), & 
+                        matrix(x-1,y+1), &
+                        spiralNumberPath)
+                    currentMoveDirection = 'R'
+                    matrix(x,y) = spiralNumberPath
+                else 
+                    y = y - 1
+                    call sumOfAdjacentSquares( &
+                        matrix(x,y+1), &
+                        matrix(x,y-1), &
+                        matrix(x+1,y), &
+                        matrix(x+1,y-1), & 
+                        matrix(x+1,y+1), &
+                        matrix(x-1,y), &
+                        matrix(x-1,y-1), & 
+                        matrix(x-1,y+1), &
+                        spiralNumberPath)
+                    matrix(x,y) = spiralNumberPath
+                endif
+
+            endif
+        enddo
+
+        call printResult('Three', 5, '2', 1, matrix(x,y))
+        
+        ! do i = 1, matrixLength
+        !     print *, matrix(i, :)      
+        ! enddo 
+    deallocate(matrix)
+
+end subroutine dayThreePartTwo
+
+
+! ----------------------------------------------------------
+subroutine sumOfAdjacentSquares(c1, c2, c3, c4, c5, c6, c7, c8, result)
+    integer c1, c2, c3, c4, c5, c6, c7, c8, result
+    result = c1 + c2 + c3 + c4 + c5 + c6 + c7 + c8
+    return
+end subroutine sumOfAdjacentSquares
 
 
 ! ----------------------------------------------------------
@@ -109,8 +291,6 @@ subroutine dayThreePartOne
     deallocate(matrix)
 
 end subroutine dayThreePartOne
-
-
 
 
 ! ----------------------------------------------------------
