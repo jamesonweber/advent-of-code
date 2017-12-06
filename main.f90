@@ -32,9 +32,7 @@ subroutine dayFivePartTwo
 
     index = 0
     move = 1
-    currentStep = 1
-    do while (index < numberOfRows)
-        
+    do while (index < numberOfRows)    
         move = steps(index+1)
         if (move < 3) then
             steps(index+1) = steps(index+1) + 1
@@ -66,9 +64,7 @@ subroutine dayFivePartOne
 
     index = 0
     move = 1
-    currentStep = 1
-    do while (index < numberOfRows)
-        
+    do while (index < numberOfRows)     
         move = steps(index+1)
         steps(index+1) = steps(index+1) + 1
         index = move + index
