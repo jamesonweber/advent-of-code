@@ -1,16 +1,53 @@
 program main
 implicit none 
 
-    call dayOnePartOne
-    call dayOnePartTwo
+    ! call dayOnePartOne
+    ! call dayOnePartTwo
 
-    call dayTwoPartOne
-    call dayTwoPartTwo
+    ! call dayTwoPartOne
+    ! call dayTwoPartTwo
 
-    call dayThreePartOne
-    call dayThreePartTwo
+    ! call dayThreePartOne
+    ! call dayThreePartTwo
+
+    call dayFivePartOne
 
 end program main
+
+
+! ----------------------------------------------------------
+subroutine dayFivePartOne
+    integer numberOfRows, move, index, stepCounter
+    integer, dimension(1059) :: steps
+
+    numberOfRows = 1059
+    stepCounter = 0
+
+    open(7, file='day5.txt')
+    do j = 1, numberOfRows
+        read(7,*) steps(j)
+    end do
+    close(7)
+
+    index = 0
+    move = 1
+    currentStep = 1
+    do while (index < numberOfRows)
+        
+        move = steps(index+1)
+        steps(index+1) = steps(index+1) + 1
+        index = move + index
+
+        !print *, steps
+        !print *, index
+
+        stepCounter = stepCounter + 1
+    enddo
+
+    print *, stepCounter
+
+
+end subroutine dayFivePartOne
 
 
 ! ----------------------------------------------------------
