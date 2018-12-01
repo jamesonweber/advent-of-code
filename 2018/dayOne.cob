@@ -50,9 +50,12 @@
                    END-PERFORM.
                CLOSE DAYONE.
     
-               DISPLAY WS-FREQUENCYSUM.
+               DISPLAY "Part 1: " WS-FREQUENCYSUM.
            STOP RUN.
 
+           *> Imported strings are right padded with spaces.
+           *> Move those spaces to the left of the content and replace
+           *> them with zeroes. 
            CONVERT-WHITESPACES-TO-ZEROES.
                UNSTRING WS-FREQUENCYSTRING DELIMITED BY ' ' INTO VARSWAP
                INSPECT VARSWAP REPLACING LEADING SPACE BY '0'
